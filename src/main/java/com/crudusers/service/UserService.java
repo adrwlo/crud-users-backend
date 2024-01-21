@@ -6,7 +6,9 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -23,7 +25,13 @@ public class UserService {
     }
 
     public List<User> getAllUsers() {
-        return userRepository.findAll();
+        List<User> allUsers = userRepository.findAll();
+
+        List<User> sortedUsers = allUsers.stream()
+                .sorted(Comparator.comparing(User::getId))
+                .collect(Collectors.toList());
+
+        return sortedUsers;
     }
 
     public User getUserById(int id) {
